@@ -40,9 +40,25 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "Azure.Identity": {
+              "target": "Package",
+              "version": "[1.5.0, )"
+            },
+            "Azure.Messaging.EventGrid": {
+              "target": "Package",
+              "version": "[4.8.2, )"
+            },
+            "Azure.Security.KeyVault.Secrets": {
+              "target": "Package",
+              "version": "[4.2.0, )"
+            },
+            "Microsoft.Azure.EventGrid": {
+              "target": "Package",
+              "version": "[3.2.1, )"
+            },
             "Microsoft.Azure.WebJobs.Extensions.EventGrid": {
               "target": "Package",
-              "version": "[2.1.0, )"
+              "version": "[3.1.0, )"
             },
             "Microsoft.NET.Sdk.Functions": {
               "target": "Package",
