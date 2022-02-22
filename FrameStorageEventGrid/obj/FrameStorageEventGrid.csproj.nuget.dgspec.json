@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\ryank\\source\\repos\\FrameStorageEventGrid\\FrameStorageEventGrid\\FrameStorageEventGrid.csproj": {}
+    "C:\\Users\\ryank\\source\\repos\\AzFacialRecognition\\FrameStorageEventGrid\\FrameStorageEventGrid.csproj": {}
   },
   "projects": {
-    "C:\\Users\\ryank\\source\\repos\\FrameStorageEventGrid\\FrameStorageEventGrid\\FrameStorageEventGrid.csproj": {
+    "C:\\Users\\ryank\\source\\repos\\AzFacialRecognition\\FrameStorageEventGrid\\FrameStorageEventGrid.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ryank\\source\\repos\\FrameStorageEventGrid\\FrameStorageEventGrid\\FrameStorageEventGrid.csproj",
+        "projectUniqueName": "C:\\Users\\ryank\\source\\repos\\AzFacialRecognition\\FrameStorageEventGrid\\FrameStorageEventGrid.csproj",
         "projectName": "FrameStorageEventGrid",
-        "projectPath": "C:\\Users\\ryank\\source\\repos\\FrameStorageEventGrid\\FrameStorageEventGrid\\FrameStorageEventGrid.csproj",
+        "projectPath": "C:\\Users\\ryank\\source\\repos\\AzFacialRecognition\\FrameStorageEventGrid\\FrameStorageEventGrid.csproj",
         "packagesPath": "C:\\Users\\ryank\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ryank\\source\\repos\\FrameStorageEventGrid\\FrameStorageEventGrid\\obj\\",
+        "outputPath": "C:\\Users\\ryank\\source\\repos\\AzFacialRecognition\\FrameStorageEventGrid\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\ryank\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -40,9 +40,33 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "Azure.Core": {
+              "target": "Package",
+              "version": "[1.22.0, )"
+            },
+            "Azure.Identity": {
+              "target": "Package",
+              "version": "[1.5.0, )"
+            },
+            "Azure.Messaging.EventGrid": {
+              "target": "Package",
+              "version": "[4.8.2, )"
+            },
+            "Azure.Security.KeyVault.Secrets": {
+              "target": "Package",
+              "version": "[4.2.0, )"
+            },
+            "Microsoft.Azure.CognitiveServices.Vision.ComputerVision": {
+              "target": "Package",
+              "version": "[7.0.1, )"
+            },
+            "Microsoft.Azure.EventGrid": {
+              "target": "Package",
+              "version": "[3.2.1, )"
+            },
             "Microsoft.Azure.WebJobs.Extensions.EventGrid": {
               "target": "Package",
-              "version": "[2.1.0, )"
+              "version": "[3.1.0, )"
             },
             "Microsoft.NET.Sdk.Functions": {
               "target": "Package",

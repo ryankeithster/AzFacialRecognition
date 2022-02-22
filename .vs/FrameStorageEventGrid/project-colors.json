@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "ccd5fb47-a3e2-4ee3-869b-b9b238278412": {
+      "ProjectGuid": "ccd5fb47-a3e2-4ee3-869b-b9b238278412",
+      "DisplayName": "FrameStorageEventGrid",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}
