@@ -4,16 +4,17 @@ using Azure.Core;
 using Azure.Identity;
 using Azure.Messaging.EventGrid;
 using Azure.Security.KeyVault.Secrets;
+using Azure.Storage;
 using System;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Host;
+using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
+using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
 using Microsoft.Azure.EventGrid.Models;
+using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.EventGrid;
+using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
 using System.Text;
-using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
 using System.Collections.Generic;
-using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
 using System.Threading.Tasks;
 
 namespace FrameStorageEventGrid
@@ -48,7 +49,15 @@ namespace FrameStorageEventGrid
             return secret.Value;
         }
 
-        public static async Task<ImageAnalysis> AnalyzeImage(string ImageUrl)
+        /// <summary>
+        /// Analyze the specified image in blob storage using Azure Computer Vision. The Computer Vision
+        /// client being used must have an associated managed identity that has been granted access to read from the
+        /// specified blob storage account.
+        /// </summary>
+        /// <param name="ImageUrl"></param>
+        /// <param name="log"></param>
+        /// <returns></returns>
+        public static async Task<ImageAnalysis> AnalyzeImageWithManagedIdentity(string ImageUrl, ILogger log)
         {
             // Retrieve information for accessing computer vision endpoint
             string compVisSubscriptionKey = GetSecretValueWithManagedIdentity(
@@ -56,6 +65,7 @@ namespace FrameStorageEventGrid
                 "ryan42-compvis-subscription-key");
 
             string compVisEndpoint = System.Environment.GetEnvironmentVariable("CompVisEndpoint");
+            log.LogInformation("Computer Vision endpoint: " + compVisEndpoint);
 
             ComputerVisionClient client =
               new ComputerVisionClient(new ApiKeyServiceClientCredentials(compVisSubscriptionKey))
@@ -65,8 +75,62 @@ namespace FrameStorageEventGrid
             List<VisualFeatureTypes?> features = new List<VisualFeatureTypes?>()
             { VisualFeatureTypes.Faces };
 
-            // Analyze the image 
+            log.LogInformation("Analyzing image " + ImageUrl);
+
+            // Analyze the image            
             ImageAnalysis results = await client.AnalyzeImageAsync(ImageUrl, visualFeatures: features);
+
+            return results;
+        }
+
+        /// <summary>
+        /// Analyze the specified image in blob storage using Azure Computer Vision. This function should work in
+        /// the absence of managed identities, although managed identities are the preferred approach.
+        /// </summary>
+        /// <param name="ImageUrl"></param>
+        /// <param name="log"></param>
+        /// <returns></returns>
+        public static async Task<ImageAnalysis> AnalyzeImageWithSASToken(string ImageUrl, ILogger log)
+        {
+            // Retrieve information for accessing computer vision endpoint
+            string compVisSubscriptionKey = GetSecretValueWithManagedIdentity(
+                System.Environment.GetEnvironmentVariable("KeyVaultUri"),
+                "ryan42-compvis-subscription-key");
+
+            // Retrieve blob storage account key
+            string accountKey = GetSecretValueWithManagedIdentity(
+                System.Environment.GetEnvironmentVariable("KeyVaultUri"),
+                "videoframe-storage-key");
+
+            string compVisEndpoint = System.Environment.GetEnvironmentVariable("CompVisEndpoint");
+            
+            log.LogInformation("Computer Vision endpoint: " + compVisEndpoint);
+
+            ComputerVisionClient client =
+              new ComputerVisionClient(new ApiKeyServiceClientCredentials(compVisSubscriptionKey))
+              { Endpoint = compVisEndpoint };
+
+            // Define the features to be extracted from the image (face only)
+            List<VisualFeatureTypes?> features = new List<VisualFeatureTypes?>()
+            { VisualFeatureTypes.Faces };
+
+            // Generate SAS token and URL since the computer vision client is not using a managed identity or
+            // it has not been granted privileges for the associated storage account
+            Azure.Storage.Sas.BlobSasBuilder blobSasBuilder = new Azure.Storage.Sas.BlobSasBuilder()
+            {
+                BlobContainerName = "<container name>", // extract from Url?
+                BlobName = "<blob name>", // extract from Url?
+                ExpiresOn = DateTime.UtcNow.AddMinutes(5),//Let SAS token expire after 5 minutes.
+            };
+            blobSasBuilder.SetPermissions(Azure.Storage.Sas.BlobSasPermissions.Read);//User will only be able to read the blob and it's properties
+            var sasToken = blobSasBuilder.ToSasQueryParameters(new StorageSharedKeyCredential("videoframestorage2", accountKey)).ToString();
+            var sasUrl = ImageUrl + "?" + sasToken;
+
+            log.LogInformation("Analyzing image " + ImageUrl);
+
+            // Analyze the image            
+            ImageAnalysis results = await client.AnalyzeImageAsync(sasUrl, visualFeatures: features);
+
             return results;
         }
 
@@ -100,8 +164,9 @@ namespace FrameStorageEventGrid
                         log.LogInformation(blobCreatedEventData.Sequencer);
                         log.LogInformation(blobCreatedEventData.Url);
 
-                        Task<ImageAnalysis> imageAnalyzing = AnalyzeImage(blobCreatedEventData.Url);
+                        Task<ImageAnalysis> imageAnalyzing = AnalyzeImageWithManagedIdentity(blobCreatedEventData.Url, log);
                         ImageAnalysis results = await imageAnalyzing;
+                        log.LogInformation("Image analysis results: " + results.ToString());
 
                         if (results.Faces is not null)
                         {
