@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "qez4f2Loiz1wsIWG/qjYK50CAVWJU9R2RJ4f21C9b0zj4duNgCWXZ6YSAhlm4srYTcO7R0XyEJYRkB34D0FxbA==",
+  "dgSpecHash": "+Snz/edO5DnmjUDW7PdYk/f1aOSfvf8zHEWyHAQtme/cdHEUD1VUljDZgjP1K48qrpMsyw32pVvQxj9Y0DUzjg==",
   "success": true,
   "projectFilePath": "C:\\Users\\ryank\\source\\repos\\AzFacialRecognition\\FrameStorageEventGrid\\FrameStorageEventGrid.csproj",
   "expectedPackageFiles": [
@@ -8,6 +8,8 @@
     "C:\\Users\\ryank\\.nuget\\packages\\azure.identity\\1.5.0\\azure.identity.1.5.0.nupkg.sha512",
     "C:\\Users\\ryank\\.nuget\\packages\\azure.messaging.eventgrid\\4.8.2\\azure.messaging.eventgrid.4.8.2.nupkg.sha512",
     "C:\\Users\\ryank\\.nuget\\packages\\azure.security.keyvault.secrets\\4.2.0\\azure.security.keyvault.secrets.4.2.0.nupkg.sha512",
+    "C:\\Users\\ryank\\.nuget\\packages\\azure.storage.blobs\\12.10.0\\azure.storage.blobs.12.10.0.nupkg.sha512",
+    "C:\\Users\\ryank\\.nuget\\packages\\azure.storage.common\\12.9.0\\azure.storage.common.12.9.0.nupkg.sha512",
     "C:\\Users\\ryank\\.nuget\\packages\\microsoft.aspnet.webapi.client\\5.2.4\\microsoft.aspnet.webapi.client.5.2.4.nupkg.sha512",
     "C:\\Users\\ryank\\.nuget\\packages\\microsoft.aspnetcore.authentication.abstractions\\2.1.0\\microsoft.aspnetcore.authentication.abstractions.2.1.0.nupkg.sha512",
     "C:\\Users\\ryank\\.nuget\\packages\\microsoft.aspnetcore.authentication.core\\2.1.0\\microsoft.aspnetcore.authentication.core.2.1.0.nupkg.sha512",
